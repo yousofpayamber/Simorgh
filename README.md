@@ -1,104 +1,148 @@
-# Simorgh
+# Simorgh 🦅
 
-Simorgh یک پروکسی SOCKS5 سبک بر پایه Python است که برای مدیریت و تغییر رفتار ترافیک شبکه طراحی شده است.
+یک پروکسی SOCKS5 سبک و قابل اطمینان بر پایه Python با قابلیت TLS Fragmentation.
 
-## ⚙️ ویژگی‌ها
-
-- SOCKS5 Proxy
-- انتقال ترافیک TCP
-- تشخیص TLS ClientHello
-- Fragmentation (تکه‌تکه کردن داده‌ها)
-- ارسال غیرخطی بسته‌ها
-- پشتیبانی از DNS over HTTPS (در نسخه‌های آینده)
-
----
-
-## 🧠 نحوه کار
-
-این ابزار بین کاربر و اینترنت قرار می‌گیرد:
-
+```
 Client → Simorgh → Server
+```
 
-در برخی شرایط، داده‌های TLS قبل از ارسال به سرور تغییر داده می‌شوند تا رفتار شبکه متفاوت شود.
-
----# Simorgh
-
-Simorgh یک پروکسی SOCKS5 سبک بر پایه Python است که برای مدیریت و تغییر رفتار ترافیک شبکه طراحی شده است.
+---
 
 ## ⚙️ ویژگی‌ها
 
-- SOCKS5 Proxy
-- انتقال ترافیک TCP
-- تشخیص TLS ClientHello
-- Fragmentation (تکه‌تکه کردن داده‌ها)
-- ارسال غیرخطی بسته‌ها
-- پشتیبانی از DNS over HTTPS (در نسخه‌های آینده)
+- **SOCKS5 Proxy** — کاملاً مطابق RFC 1928
+- **احراز هویت** — پشتیبانی از username/password (RFC 1929) با محافظت در برابر timing attacks
+- **TLS Fragmentation** — تشخیص ClientHello و ارسال تکه‌تکه با تأخیر تنظیم‌پذیر
+- **محدودیت اتصال** — جلوگیری از resource exhaustion
+- **Timeout** — بستن خودکار اتصال‌های stale
+- **Logging** — گزارش‌گیری کامل با پشتیبانی از فایل و چرخش خودکار
+- **تست‌های یونیت** — پوشش کامل ماژول‌های اصلی
+- **پیکربندی ساده** — یک فایل YAML با مستندات کامل
 
 ---
 
-📥 نصب و راه‌اندازی
+## 📋 پیش‌نیازها
 
-برای نصب و اجرای پروژه ابتدا مطمئن شوید Python نسخه 3.8 یا بالاتر روی سیستم شما نصب است. برای بررسی نسخه Python دستور زیر را اجرا کنید:
+- Python **3.10** یا بالاتر
 
+```bash
 python3 --version
-
-اگر Python نصب نبود، می‌توانید در سیستم‌های Ubuntu / Debian آن را به صورت زیر نصب کنید:
-
-sudo apt update
-sudo apt install python3 python3-pip git -y
-
+```
 
 ---
 
-در مرحله بعد، باید سورس پروژه را از GitHub دانلود کنید:
+## 📥 نصب
 
+```bash
 git clone https://github.com/yousofpayamber/simorgh.git
 cd simorgh
-
-
----
-
-سپس وابستگی‌های پروژه را نصب کنید:
-
 pip install -r requirements.txt
-
+```
 
 ---
 
-در صورت نیاز می‌توانید تنظیمات پروژه را در فایل زیر تغییر دهید:
+## 🚀 اجرا
 
-config/config.yaml
+```bash
+python3 main.py
+```
 
-برای مثال:
+یا با مسیر config دلخواه:
 
-listen_host: 127.0.0.1
+```bash
+python3 main.py --config /path/to/config.yaml
+```
+
+یا با override سطح لاگ:
+
+```bash
+python3 main.py --log-level DEBUG
+```
+
+---
+
+## ⚙️ پیکربندی
+
+فایل `config/config.yaml`:
+
+```yaml
+listen_host: "127.0.0.1"
 listen_port: 1080
+max_connections: 200
+connection_timeout: 30
+
+auth:
+  enabled: false
+  username: ""
+  password: ""
 
 fragment:
+  enabled: true
   min_size: 10
   max_size: 40
   delay_min: 0.01
   delay_max: 0.05
+  randomize_order: false
 
-
----
-
-پس از انجام تنظیمات، پروژه را اجرا کنید:
-
-python3 main.py
-
+logging:
+  level: "INFO"
+  # file: "simorgh.log"
+```
 
 ---
 
-اکنون پروکسی روی سیستم شما فعال است و می‌توانید آن را در برنامه‌ها یا مرورگر خود به صورت SOCKS5 تنظیم کنید:
+## 🔐 فعال‌سازی احراز هویت
 
-IP: 127.0.0.1
+```yaml
+auth:
+  enabled: true
+  username: "myuser"
+  password: "mypassword"
+```
+
+---
+
+## 🧪 اجرای تست‌ها
+
+```bash
+python3 -m pytest tests/ -v
+```
+
+---
+
+## 🌐 تنظیم در مرورگر
+
+بعد از اجرا، پروکسی را در مرورگر یا سیستم‌عامل روی SOCKS5 تنظیم کنید:
+
+```
+Host: 127.0.0.1
 Port: 1080
+Type: SOCKS5
+```
 
+---
+
+## ساختار پروژه
+
+```
+Simorgh/
+├── main.py                  # نقطه ورود
+├── requirements.txt
+├── config/
+│   └── config.yaml          # پیکربندی
+├── core/
+│   ├── __init__.py
+│   ├── proxy.py             # سرور اصلی
+│   ├── socks5.py            # پروتکل SOCKS5
+│   ├── fragment.py          # TLS fragmentation
+│   ├── config_validator.py  # اعتبارسنجی config
+│   └── logger.py            # راه‌اندازی لاگ
+├── scripts/
+│   └── run.sh               # اسکریپت نصب و اجرا
+└── tests/
+    └── test_simorgh.py      # تست‌های یونیت
+```
 
 ---
 
-⚠️ این پروژه برای تست و پژوهش شبکه طراحی شده است و ممکن است در شرایط مختلف شبکه رفتار متفاوتی داشته باشد.
-
-
----
+> ⚠️ این پروژه برای تست و پژوهش شبکه طراحی شده است.

@@ -1,11 +1,41 @@
-listen_host: 127.0.0.1
+# ── Simorgh Configuration ────────────────────────────────────────────────────
+
+# Address and port to listen on
+listen_host: "127.0.0.1"
 listen_port: 1080
 
-mode: auto
+# Maximum number of simultaneous client connections
+max_connections: 200
 
+# Seconds before an idle/stalled connection is forcibly closed
+connection_timeout: 30
+
+# ── Authentication (RFC 1929 Username/Password) ───────────────────────────────
+auth:
+  enabled: false        # Set to true to require a username + password
+  username: ""
+  password: ""
+
+# ── TLS Fragmentation ─────────────────────────────────────────────────────────
 fragment:
   enabled: true
+
+  # Size range (bytes) for each fragment
   min_size: 10
   max_size: 40
+
+  # Random delay (seconds) between fragments
   delay_min: 0.01
   delay_max: 0.05
+
+  # Shuffle fragment order (except the first one) — experimental
+  randomize_order: false
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  level: "INFO"         # DEBUG | INFO | WARNING | ERROR
+
+  # Uncomment to also write logs to a file:
+  # file: "simorgh.log"
+  # max_mb: 5           # Rotate after this many MB
+  # backups: 3          # Keep this many old log files
