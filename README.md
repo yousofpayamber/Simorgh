@@ -11,7 +11,7 @@ Client → Simorgh → Server
 ## ⚙️ ویژگی‌ها
 
 - **SOCKS5 Proxy** — کاملاً مطابق RFC 1928
-- **احراز هویت** — پشتیبانی از username/password (RFC 1929) با محافظت در برابر timing attacks
+- **احراز هویت** — پشتیبانی از username/password (RFC 1929)
 - **TLS Fragmentation** — تشخیص ClientHello و ارسال تکه‌تکه با تأخیر تنظیم‌پذیر
 - **محدودیت اتصال** — جلوگیری از resource exhaustion
 - **Timeout** — بستن خودکار اتصال‌های stale
@@ -34,26 +34,26 @@ python3 --version
 ## 📥 نصب
 
 ```bash
-git clone https://github.com/yousofpayamber/simorgh.git
-cd simorgh
+git clone https://github.com/yousofpayamber/Simorgh.git
+cd Simorgh
 pip install -r requirements.txt
 ```
 
 ---
 
-## 🚀 اجرا
+## 🚀 اجرا (کامپیوتر)
 
 ```bash
 python3 main.py
 ```
 
-یا با مسیر config دلخواه:
+با مسیر config دلخواه:
 
 ```bash
 python3 main.py --config /path/to/config.yaml
 ```
 
-یا با override سطح لاگ:
+با override سطح لاگ:
 
 ```bash
 python3 main.py --log-level DEBUG
@@ -86,7 +86,6 @@ fragment:
 
 logging:
   level: "INFO"
-  # file: "simorgh.log"
 ```
 
 ---
@@ -110,38 +109,33 @@ python3 -m pytest tests/ -v
 
 ---
 
-## 🌐 تنظیم در مرورگر
-
-بعد از اجرا، پروکسی را در مرورگر یا سیستم‌عامل روی SOCKS5 تنظیم کنید:
-
-```
-Host: 127.0.0.1
-Port: 1080
-Type: SOCKS5
-```
-
----
-
 ## ساختار پروژه
 
 ```
 Simorgh/
-├── main.py                  # نقطه ورود
+├── main.py
 ├── requirements.txt
 ├── config/
-│   └── config.yaml          # پیکربندی
+│   └── config.yaml
 ├── core/
-│   ├── __init__.py
-│   ├── proxy.py             # سرور اصلی
-│   ├── socks5.py            # پروتکل SOCKS5
-│   ├── fragment.py          # TLS fragmentation
-│   ├── config_validator.py  # اعتبارسنجی config
-│   └── logger.py            # راه‌اندازی لاگ
+│   ├── proxy.py
+│   ├── socks5.py
+│   ├── fragment.py
+│   ├── config_validator.py
+│   └── logger.py
 ├── scripts/
-│   └── run.sh               # اسکریپت نصب و اجرا
+│   └── run.sh
 └── tests/
-    └── test_simorgh.py      # تست‌های یونیت
+    └── test_simorgh.py
 ```
+
+---
+
+## 📱 اتصال با اندروید
+
+> برای آموزش کامل اجرا و اتصال با گوشی اندروید و ترموکس:
+>
+> **[👈 آموزش اتصال با اندروید](ANDROID.md)**
 
 ---
 
