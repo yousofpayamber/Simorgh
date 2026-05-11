@@ -1,0 +1,10 @@
+listen_host: 127.0.0.1
+listen_port: 1080
+
+mode: auto
+
+fragment:
+  min_size: 2
+  max_size: 5
+  delay_min: 0.005
+  delay_max: 0.02
